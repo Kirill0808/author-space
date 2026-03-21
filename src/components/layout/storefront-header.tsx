@@ -1,0 +1,45 @@
+import Link from "next/link"
+import { auth } from "@/auth"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { buttonVariants } from "@/components/ui/button"
+
+export async function StorefrontHeader() {
+  const session = await auth()
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+        <div className="flex gap-6 md:gap-10">
+          <Link href="/" className="flex items-center space-x-2">
+            <span className="font-bold inline-block text-xl">Author Space</span>
+          </Link>
+          <nav className="hidden gap-6 md:flex">
+            <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Главная
+            </Link>
+            <Link href="/books" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Книги
+            </Link>
+            <Link href="/blog" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Блог
+            </Link>
+          </nav>
+        </div>
+        <div className="flex items-center justify-end gap-4">
+          <nav className="flex items-center gap-2">
+            <ThemeToggle />
+            {session?.user ? (
+              <Link href="/api/auth/signout" className={buttonVariants({ variant: "outline" })}>
+                Выйти
+              </Link>
+            ) : (
+              <Link href="/api/auth/signin" className={buttonVariants({ variant: "default" })}>
+                Войти
+              </Link>
+            )}
+          </nav>
+        </div>
+      </div>
+    </header>
+  )
+}

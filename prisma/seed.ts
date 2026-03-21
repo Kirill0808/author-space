@@ -14,6 +14,7 @@ const pool = new Pool({
   database: 'postgres',
   ssl: { rejectUnauthorized: false },
 })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const adapter = new PrismaPg(pool as any)
 const prisma = new PrismaClient({ adapter })
 
@@ -34,7 +35,7 @@ async function main() {
   })
 
   // Create mock books
-  const book1 = await prisma.book.create({
+  await prisma.book.create({
     data: {
       title: 'The Art of Writing',
       description: 'A comprehensive guide to writing books.',
@@ -44,7 +45,7 @@ async function main() {
     },
   })
 
-  const book2 = await prisma.book.create({
+  await prisma.book.create({
     data: {
       title: 'Journey to the Stars',
       description: 'A sci-fi novel about space exploration.',

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { auth } from "@/auth"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { buttonVariants } from "@/components/ui/button"
+import { StorefrontAuth } from "./storefront-auth"
 
 export async function StorefrontHeader() {
   const session = await auth()
@@ -28,15 +28,7 @@ export async function StorefrontHeader() {
         <div className="flex items-center justify-end gap-4">
           <nav className="flex items-center gap-2">
             <ThemeToggle />
-            {session?.user ? (
-              <Link href="/api/auth/signout" className={buttonVariants({ variant: "outline" })}>
-                Выйти
-              </Link>
-            ) : (
-              <Link href="/api/auth/signin" className={buttonVariants({ variant: "default" })}>
-                Войти
-              </Link>
-            )}
+            <StorefrontAuth hasUser={!!session?.user} />
           </nav>
         </div>
       </div>

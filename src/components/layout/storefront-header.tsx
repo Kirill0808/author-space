@@ -15,13 +15,13 @@ export async function StorefrontHeader() {
           </Link>
           <nav className="hidden gap-6 md:flex">
             <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Главная
+              Home
             </Link>
             <Link href="/books" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Книги
+              Books
             </Link>
             <Link href="/blog" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Блог
+              Blog
             </Link>
           </nav>
         </div>

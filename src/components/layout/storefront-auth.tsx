@@ -7,13 +7,13 @@ export function StorefrontAuth({ hasUser }: { hasUser: boolean }) {
   if (hasUser) {
     return (
       <Link href="/api/auth/signout" className={buttonVariants({ variant: "outline" })}>
-        Выйти
+        Sign out
       </Link>
     )
   }
   return (
     <Link href="/api/auth/signin" className={buttonVariants({ variant: "default" })}>
-      Войти
+      Sign in
     </Link>
   )
 }

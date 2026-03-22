@@ -1,4 +1,4 @@
-import dns from 'node:dns'
+import * as dns from 'node:dns'
 dns.setDefaultResultOrder('ipv4first')
 
 import { PrismaClient } from '@prisma/client'
@@ -14,8 +14,7 @@ const pool = new Pool({
   database: 'postgres',
   ssl: { rejectUnauthorized: false },
 })
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const adapter = new PrismaPg(pool as any)
+const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0])
 const prisma = new PrismaClient({ adapter })
 
 async function main() {

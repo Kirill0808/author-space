@@ -1,10 +1,12 @@
 "use client"
 
 
+import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button-variants"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +16,17 @@ import {
 
 export function ThemeToggle() {
   const { setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <div className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "opacity-0")} />
+    )
+  }
 
   return (
     <DropdownMenu>

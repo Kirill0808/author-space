@@ -4,7 +4,12 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { StorefrontAuth } from "./storefront-auth"
 
 export async function StorefrontHeader() {
-  const session = await auth()
+  let session = null
+  try {
+    session = await auth()
+  } catch (error) {
+    console.error("Auth session fetch failed:", error)
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

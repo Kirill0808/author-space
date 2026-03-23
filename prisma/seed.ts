@@ -1,4 +1,4 @@
-import dns from 'node:dns'
+import * as dns from 'node:dns'
 dns.setDefaultResultOrder('ipv4first')
 
 import { PrismaClient } from '@prisma/client'
@@ -14,7 +14,7 @@ const pool = new Pool({
   database: 'postgres',
   ssl: { rejectUnauthorized: false },
 })
-const adapter = new PrismaPg(pool as any)
+const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0])
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
@@ -34,7 +34,7 @@ async function main() {
   })
 
   // Create mock books
-  const book1 = await prisma.book.create({
+  await prisma.book.create({
     data: {
       title: 'The Art of Writing',
       description: 'A comprehensive guide to writing books.',
@@ -44,7 +44,7 @@ async function main() {
     },
   })
 
-  const book2 = await prisma.book.create({
+  await prisma.book.create({
     data: {
       title: 'Journey to the Stars',
       description: 'A sci-fi novel about space exploration.',

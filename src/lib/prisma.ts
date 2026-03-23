@@ -1,4 +1,4 @@
-import dns from 'node:dns'
+import * as dns from 'node:dns'
 dns.setDefaultResultOrder('ipv4first')
 
 import { PrismaClient } from '@prisma/client'
@@ -16,7 +16,7 @@ const prismaClientSingleton = () => {
     database: u.pathname.slice(1),
     ssl: { rejectUnauthorized: false },
   })
-  const adapter = new PrismaPg(pool as any)
+  const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0])
   return new PrismaClient({ adapter })
 }
 

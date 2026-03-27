@@ -1,14 +1,14 @@
 import Link from "next/link"
-import Image from "next/image"
 import { prisma } from "@/lib/prisma"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Newspaper, ArrowRight } from "lucide-react"
+import { Card } from "@/components/ui/card"
+import { Newspaper, ArrowRight } from "lucide-react"
 
 import { Book, Post } from "@prisma/client"
+import { BookCard } from "@/components/books/book-card"
 
 export default async function Home() {
   let featuredBooks: Book[] = []
@@ -83,41 +83,7 @@ export default async function Home() {
         
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {featuredBooks.map((book) => (
-            <Card key={book.id} className="overflow-hidden flex flex-col group border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="aspect-[3/4] relative overflow-hidden bg-muted">
-                {book.coverImage ? (
-                  <Image 
-                    src={book.coverImage} 
-                    alt={book.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center p-8 text-muted-foreground">
-                    <BookOpen className="h-12 w-12 opacity-20" />
-                  </div>
-                )}
-              </div>
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge variant="secondary" className="font-normal">New Release</Badge>
-                  <span className="text-lg font-semibold">${(book.price / 100).toFixed(2)}</span>
-                </div>
-                <CardTitle className="line-clamp-1">{book.title}</CardTitle>
-                <CardDescription className="line-clamp-2">{book.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1">
-                {/* Additional content could go here */}
-              </CardContent>
-              <CardFooter className="pt-0 pb-6 pr-6 pl-6">
-                <Link 
-                  href={`/books/${book.slug}`}
-                  className={cn(buttonVariants({ variant: "default" }), "w-full rounded-lg")}
-                >
-                  Learn More
-                </Link>
-              </CardFooter>
-            </Card>
+            <BookCard key={book.id} book={book} showBadge />
           ))}
         </div>
       </section>

@@ -54,6 +54,46 @@ async function main() {
     },
   })
 
+  await prisma.book.create({
+    data: {
+      title: 'Echoes of Eternity',
+      description: 'An epic fantasy novel tracing the journey of a young mage who must save the realm from an ancient curse.',
+      price: 2999,
+      slug: 'echoes-of-eternity',
+      coverImage: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=2588&auto=format&fit=crop',
+    },
+  })
+
+  await prisma.book.create({
+    data: {
+      title: 'Digital Minimalism',
+      description: 'In this timely and enlightening book, the author introduces a philosophy for technology use that has already improved countless lives. Discover how to reclaim your time!',
+      price: 1850,
+      slug: 'digital-minimalism',
+      coverImage: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2712&auto=format&fit=crop',
+    },
+  })
+
+  await prisma.book.create({
+    data: {
+      title: 'The Whispering Shadows',
+      description: 'A terrifying psychological thriller about a detective investigating a series of inexplicable disappearances in a small coastal town.',
+      price: 2490,
+      slug: 'the-whispering-shadows',
+      coverImage: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=2730&auto=format&fit=crop',
+    },
+  })
+
+  await prisma.book.create({
+    data: {
+      title: 'Mastering Next.js',
+      description: 'The complete guide to building blazing fast React applications with Next.js 15, the App Router, and React Server Components.',
+      price: 3499,
+      slug: 'mastering-nextjs',
+      coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2940&auto=format&fit=crop',
+    },
+  })
+
   // Create mock posts
   await prisma.post.create({
     data: {

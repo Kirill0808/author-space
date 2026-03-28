@@ -45,10 +45,13 @@ export function BookCard({ book, showBadge = false, className }: BookCardProps) 
         <CardTitle className="line-clamp-1 group-hover:text-primary transition-colors">{book.title}</CardTitle>
         <CardDescription className="line-clamp-2">{book.description}</CardDescription>
       </CardHeader>
-      <CardFooter className="mt-auto pr-6 pl-6 pb-6 pt-0">
+      <CardFooter className="mt-auto p-6 pt-4">
         <Link 
           href={`/books/${book.slug}`}
-          className={cn(buttonVariants({ variant: "default" }), "w-full rounded-lg")}
+          className={cn(
+            buttonVariants({ variant: "secondary" }), 
+            "w-full rounded-xl font-semibold text-[15px] bg-secondary/70 hover:bg-secondary shadow-sm transition-all py-3 flex items-center justify-center"
+          )}
         >
           View Details
         </Link>

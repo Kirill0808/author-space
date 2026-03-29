@@ -9,6 +9,7 @@ import { Newspaper, ArrowRight } from "lucide-react"
 
 import { Book, Post } from "@prisma/client"
 import { BookCard } from "@/components/books/book-card"
+import { PostCard } from "@/components/blog/post-card"
 
 export default async function Home() {
   let featuredBooks: Book[] = []
@@ -106,22 +107,7 @@ export default async function Home() {
           
           <div className="lg:w-2/3 grid gap-6 sm:grid-cols-2 w-full">
             {latestPosts.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="block group">
-                <Card className="h-full border-none shadow-none bg-background/50 hover:bg-background transition-colors p-6 rounded-2xl group-hover:ring-1 ring-primary/20 ring-inset">
-                  <div className="text-xs text-muted-foreground mb-3 flex items-center justify-between">
-                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed mb-4">
-                    {post.content}
-                  </p>
-                  <div className="text-primary text-sm font-semibold flex items-center mt-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                    Read more <ArrowRight className="ml-1 h-3 w-3" />
-                  </div>
-                </Card>
-              </Link>
+              <PostCard key={post.id} post={post} />
             ))}
             {latestPosts.length === 0 && (
               <div className="col-span-full py-12 text-center text-muted-foreground bg-background/50 rounded-2xl border border-dashed border-muted">

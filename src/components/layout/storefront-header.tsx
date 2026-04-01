@@ -33,7 +33,10 @@ export async function StorefrontHeader() {
         <div className="flex items-center justify-end gap-4">
           <nav className="flex items-center gap-2">
             <ThemeToggle />
-            <StorefrontAuth hasUser={!!session?.user} />
+            <StorefrontAuth 
+              key={session?.user?.email || "guest"} 
+              user={session?.user} 
+            />
           </nav>
         </div>
       </div>

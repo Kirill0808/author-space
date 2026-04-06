@@ -9,3 +9,12 @@ export const bookSchema = z.object({
 })
 
 export type BookFormData = z.infer<typeof bookSchema>
+
+export const postSchema = z.object({
+  title: z.string().min(2, "Title must be at least 2 characters"),
+  slug: z.string().min(2, "Slug must be at least 2 characters"),
+  content: z.string().min(10, "Content must be at least 10 characters"),
+  published: z.boolean().default(false),
+})
+
+export type PostFormData = z.infer<typeof postSchema>

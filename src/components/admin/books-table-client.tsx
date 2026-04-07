@@ -30,6 +30,7 @@ interface Book {
   title: string
   price: number
   slug: string
+  description: string
   coverImage: string | null
   createdAt: Date
 }
@@ -178,7 +179,6 @@ export function BooksTableClient({ books }: BooksTableClientProps) {
             <BookForm 
               initialData={{
                 ...editingBook,
-                description: "", // We need to fetch full data or pass it
                 coverImage: editingBook.coverImage ?? undefined,
               }} 
               onSuccess={() => {

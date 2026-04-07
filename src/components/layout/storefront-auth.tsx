@@ -14,13 +14,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { logout } from "@/lib/actions/auth"
-import { User, LogOut, Settings, User as UserIcon } from "lucide-react"
+import { User, LogOut, Settings, User as UserIcon, LayoutDashboard } from "lucide-react"
 
 interface StorefrontAuthProps {
   user?: {
     name?: string | null
     email?: string | null
     image?: string | null
+    role?: string | null
   }
 }
 
@@ -66,6 +67,17 @@ export function StorefrontAuth({ user }: StorefrontAuthProps) {
               <span>Settings</span>
             </Link>
           </DropdownMenuItem>
+          {user.role === "ADMIN" && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="font-medium text-primary focus:bg-primary/5 focus:text-primary">
+                <Link href="/admin" className="flex w-full items-center">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Admin Dashboard</span>
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem 
             className="text-destructive focus:bg-destructive/10 focus:text-destructive"

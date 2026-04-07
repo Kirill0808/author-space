@@ -27,18 +27,6 @@ const menuItems = [
     href: "/admin/posts",
     path: "/admin/posts",
   },
-  {
-    title: "Users",
-    icon: Users,
-    href: "/admin/users",
-    path: "/admin/users",
-  },
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/admin/settings",
-    path: "/admin/settings",
-  },
 ]
 
 export function AdminSidebar({ className }: SidebarProps) {
@@ -85,7 +73,10 @@ export function AdminSidebar({ className }: SidebarProps) {
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Admin Actions</span>
           </div>
-          <button className="mt-4 flex w-full items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors">
+          <button 
+            onClick={() => logout()}
+            className="mt-4 flex w-full items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+          >
             <LogOut className="h-4 w-4" />
             <span>Sign out admin</span>
           </button>

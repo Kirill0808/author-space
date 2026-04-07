@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 import {
   Card,
   CardContent,
@@ -130,7 +131,10 @@ export default async function AdminDashboardPage() {
             <CardDescription>Commonly used management tools.</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3">
-             <button className="flex items-center gap-3 w-full p-4 rounded-xl bg-background border border-border/50 hover:border-primary/50 text-left transition-all group">
+             <Link 
+               href="/admin/books"
+               className="flex items-center gap-3 w-full p-4 rounded-xl bg-background border border-border/50 hover:border-primary/50 text-left transition-all group"
+             >
                 <div className="bg-blue-500/10 p-2 rounded-lg group-hover:bg-blue-500/20">
                    <BookOpen className="h-5 w-5 text-blue-500" />
                 </div>
@@ -138,8 +142,11 @@ export default async function AdminDashboardPage() {
                    <div className="text-sm font-semibold">Manage Library</div>
                    <div className="text-xs text-muted-foreground">Add and edit your books</div>
                 </div>
-             </button>
-             <button className="flex items-center gap-3 w-full p-4 rounded-xl bg-background border border-border/50 hover:border-primary/50 text-left transition-all group">
+             </Link>
+             <Link 
+               href="/admin/posts"
+               className="flex items-center gap-3 w-full p-4 rounded-xl bg-background border border-border/50 hover:border-primary/50 text-left transition-all group"
+             >
                 <div className="bg-emerald-500/10 p-2 rounded-lg group-hover:bg-emerald-500/20">
                    <FileText className="h-5 w-5 text-emerald-500" />
                 </div>
@@ -147,7 +154,7 @@ export default async function AdminDashboardPage() {
                    <div className="text-sm font-semibold">Write Post</div>
                    <div className="text-xs text-muted-foreground">Create a new blog story</div>
                 </div>
-             </button>
+             </Link>
           </CardContent>
         </Card>
       </div>

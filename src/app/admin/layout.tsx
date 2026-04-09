@@ -30,8 +30,10 @@ export default async function AdminLayout({
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-6 lg:p-10">
-          {children}
+        <main className="flex-1 overflow-y-auto">
+          <div className="container max-w-6xl mx-auto px-4 py-8 md:px-6 md:py-10 animate-in fade-in duration-700">
+            {children}
+          </div>
         </main>
       </div>
     </div>

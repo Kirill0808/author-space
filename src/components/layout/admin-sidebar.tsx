@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/actions/auth"
-import { LayoutDashboard, BookOpen, FileText, Settings, Users, ChevronRight, LogOut, ArrowLeft } from "lucide-react"
+import { LayoutDashboard, BookOpen, FileText, Settings, Users, ChevronRight, LogOut, ArrowLeft, ShoppingCart } from "lucide-react"
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -26,6 +26,12 @@ const menuItems = [
     icon: FileText,
     href: "/admin/posts",
     path: "/admin/posts",
+  },
+  {
+    title: "Orders",
+    icon: ShoppingCart,
+    href: "/admin/orders",
+    path: "/admin/orders",
   },
 ]
 

@@ -115,6 +115,64 @@ async function main() {
     },
   })
 
+  // Create mock customers
+  const customer1 = await prisma.user.create({
+    data: {
+      name: 'Иван Иванов',
+      email: 'ivan@example.com',
+      role: 'USER',
+    },
+  })
+
+  const customer2 = await prisma.user.create({
+    data: {
+      name: 'Анна Смирнова',
+      email: 'anna@example.com',
+      role: 'USER',
+    },
+  })
+
+  // Create mock orders
+  await prisma.order.create({
+    data: {
+      userId: customer1.id,
+      totalAmount: 3498, // $34.98
+      status: 'PAID',
+    },
+  })
+
+  await prisma.order.create({
+    data: {
+      userId: customer2.id,
+      totalAmount: 1499, // $14.99
+      status: 'SHIPPED',
+    },
+  })
+
+  await prisma.order.create({
+    data: {
+      userId: admin.id,
+      totalAmount: 2999, // $29.99
+      status: 'DELIVERED',
+    },
+  })
+
+  await prisma.order.create({
+    data: {
+      userId: customer1.id,
+      totalAmount: 1850, // $18.50
+      status: 'PENDING',
+    },
+  })
+
+  await prisma.order.create({
+    data: {
+      userId: customer2.id,
+      totalAmount: 2490, // $24.90
+      status: 'CANCELLED',
+    },
+  })
+
   console.log('Seed completed successfully.')
 }
 

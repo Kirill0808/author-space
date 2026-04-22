@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Clock,
 } from "lucide-react"
+import { cn, formatRelativeTime } from "@/lib/utils"
 
 export default async function AdminDashboardPage() {
   const session = await auth()
@@ -63,19 +64,66 @@ export default async function AdminDashboardPage() {
     },
   ]
 
-  // Recent activity (mock data for now or fetch from DB)
-  const recentActivities = [
-    { id: 1, type: "book", message: "New book 'The Infinite Loop' added", time: "2 hours ago" },
-    { id: 2, type: "post", message: "Published blog post 'Building with Next.js'", time: "5 hours ago" },
-    { id: 3, type: "user", message: "New user registered: alex@example.com", time: "Yesterday" },
+  // Recent activity: Fetch latest items from all relevant tables
+  const [recentBooks, recentPosts, recentUsers, recentOrders] = await Promise.all([
+    prisma.book.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
+    prisma.post.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
+    prisma.user.findMany({ take: 5, orderBy: { createdAt: "desc" } }),
+    prisma.order.findMany({ 
+      take: 5, 
+      orderBy: { createdAt: "desc" },
+      include: { user: { select: { name: true, email: true } } }
+    }),
+  ])
+
+  // Combine and sort
+  const allActivities = [
+    ...recentBooks.map(b => ({
+      id: `book-${b.id}`,
+      type: "book",
+      message: `New book added: ${b.title}`,
+      time: b.createdAt,
+      icon: BookOpen,
+      color: "text-blue-500",
+      bg: "bg-blue-500/10"
+    })),
+    ...recentPosts.map(p => ({
+      id: `post-${p.id}`,
+      type: "post",
+      message: `${p.published ? 'Published' : 'Drafted'} post: ${p.title}`,
+      time: p.createdAt,
+      icon: FileText,
+      color: "text-emerald-500",
+      bg: "bg-emerald-500/10"
+    })),
+    ...recentUsers.map(u => ({
+      id: `user-${u.id}`,
+      type: "user",
+      message: `New user registered: ${u.name || u.email}`,
+      time: u.createdAt,
+      icon: Users,
+      color: "text-purple-500",
+      bg: "bg-purple-500/10"
+    })),
+    ...recentOrders.map(o => ({
+      id: `order-${o.id}`,
+      type: "order",
+      message: `New order: ${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(o.totalAmount / 100)}`,
+      time: o.createdAt,
+      icon: ShoppingBag,
+      color: "text-amber-500",
+      bg: "bg-amber-500/10"
+    })),
   ]
+  .sort((a, b) => b.time.getTime() - a.time.getTime())
+  .slice(0, 8)
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold tracking-tight">Overview</h1>
         <p className="text-muted-foreground">
-          Welcome back, {session?.user?.name}. Here's what's happening on your site today.
+          Welcome back, {session?.user?.name}. Here&apos;s what&apos;s happening on your site today.
         </p>
       </div>
 
@@ -109,22 +157,29 @@ export default async function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-               {recentActivities.map((activity) => (
-                 <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg border border-border/40 hover:bg-secondary/20 transition-colors">
-                   <div className="bg-primary/5 p-2 rounded-full">
-                     <Clock className="h-4 w-4 text-primary" />
-                   </div>
-                   <div className="flex-1 space-y-0.5">
-                     <p className="text-sm font-medium">{activity.message}</p>
-                     <p className="text-xs text-muted-foreground">{activity.time}</p>
-                   </div>
+               {allActivities.length === 0 ? (
+                 <div className="text-center py-6 text-muted-foreground italic">
+                   No recent activity to show.
                  </div>
-               ))}
+               ) : (
+                 allActivities.map((activity) => (
+                   <div key={activity.id} className="flex items-center gap-4 p-3 rounded-xl border border-border/40 hover:bg-secondary/20 transition-all group">
+                     <div className={cn(activity.bg, activity.color, "p-2.5 rounded-full shrink-0")}>
+                       <activity.icon className="h-4 w-4" />
+                     </div>
+                     <div className="flex-1 min-w-0">
+                       <p className="text-sm font-medium leading-none truncate mb-1">{activity.message}</p>
+                       <p className="text-xs text-muted-foreground flex items-center gap-1">
+                         <Clock className="h-3 w-3" />
+                         {formatRelativeTime(activity.time)}
+                       </p>
+                     </div>
+                   </div>
+                 ))
+               )}
             </div>
           </CardContent>
         </Card>
-
-        {/* Quick Actions / Info Sidebar */}
         <Card className="lg:col-span-3 border-border/50 bg-secondary/10">
           <CardHeader>
             <CardTitle>Quick Links</CardTitle>

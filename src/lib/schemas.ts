@@ -18,3 +18,10 @@ export const postSchema = z.object({
 })
 
 export type PostFormData = z.infer<typeof postSchema>
+
+export const profileSchema = z.object({
+  name: z.string().min(2, "Имя должно содержать минимум 2 символа"),
+  image: z.string().url("Введите корректный URL изображения").optional().or(z.literal("")),
+})
+
+export type ProfileFormData = z.infer<typeof profileSchema>

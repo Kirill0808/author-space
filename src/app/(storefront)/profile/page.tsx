@@ -25,10 +25,10 @@ export default async function ProfilePage() {
   }) : "Неизвестно"
 
   return (
-    <div className="container max-w-4xl py-12 lg:py-20 animate-in fade-in duration-500">
-      <div className="flex flex-col gap-8">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Личный кабинет</h1>
+    <div className="flex justify-center w-full py-12 lg:py-20 animate-in fade-in duration-500">
+      <div className="w-full max-w-4xl px-4 flex flex-col gap-8">
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-bold tracking-tight">Личный кабинет</h1>
           <p className="text-muted-foreground">Управляйте своим профилем и настройками аккаунта.</p>
         </div>
 

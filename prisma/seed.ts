@@ -133,11 +133,27 @@ async function main() {
   })
 
   // Create mock orders
+  const books = await prisma.book.findMany()
+
   await prisma.order.create({
     data: {
       userId: customer1.id,
       totalAmount: 3498, // $34.98
       status: 'PAID',
+      items: {
+        create: [
+          {
+            bookId: books[0].id,
+            quantity: 1,
+            priceAtPurchase: books[0].price,
+          },
+          {
+            bookId: books[1].id,
+            quantity: 1,
+            priceAtPurchase: books[1].price,
+          }
+        ]
+      }
     },
   })
 
@@ -146,6 +162,15 @@ async function main() {
       userId: customer2.id,
       totalAmount: 1499, // $14.99
       status: 'SHIPPED',
+      items: {
+        create: [
+          {
+            bookId: books[1].id,
+            quantity: 1,
+            priceAtPurchase: books[1].price,
+          }
+        ]
+      }
     },
   })
 
@@ -154,6 +179,15 @@ async function main() {
       userId: admin.id,
       totalAmount: 2999, // $29.99
       status: 'DELIVERED',
+      items: {
+        create: [
+          {
+            bookId: books[2].id,
+            quantity: 1,
+            priceAtPurchase: books[2].price,
+          }
+        ]
+      }
     },
   })
 
@@ -162,6 +196,15 @@ async function main() {
       userId: customer1.id,
       totalAmount: 1850, // $18.50
       status: 'PENDING',
+      items: {
+        create: [
+          {
+            bookId: books[3].id,
+            quantity: 1,
+            priceAtPurchase: books[3].price,
+          }
+        ]
+      }
     },
   })
 
@@ -170,6 +213,15 @@ async function main() {
       userId: customer2.id,
       totalAmount: 2490, // $24.90
       status: 'CANCELLED',
+      items: {
+        create: [
+          {
+            bookId: books[4].id,
+            quantity: 1,
+            priceAtPurchase: books[4].price,
+          }
+        ]
+      }
     },
   })
 

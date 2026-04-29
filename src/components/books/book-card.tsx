@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button-variants"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen } from "lucide-react"
+import { AddToCartButton } from "./add-to-cart-button"
 
 interface BookCardProps {
   book: Book
@@ -46,12 +47,17 @@ export function BookCard({ book, showBadge = false, className }: BookCardProps) 
         <CardTitle className="line-clamp-1 group-hover:text-primary transition-colors">{book.title}</CardTitle>
         <CardDescription className="line-clamp-2">{book.description}</CardDescription>
       </CardHeader>
-      <CardFooter className="mt-auto p-6 pt-4">
+      <CardFooter className="mt-auto p-6 pt-4 flex flex-col gap-3">
+        <AddToCartButton 
+          book={book} 
+          size="default"
+          className="w-full shadow-sm h-11 text-[15px]"
+        />
         <Link 
           href={`/books/${book.slug}`}
           className={cn(
             buttonVariants({ variant: "secondary" }), 
-            "w-full rounded-xl font-semibold text-[15px] bg-secondary/70 hover:bg-secondary shadow-sm transition-all py-3 flex items-center justify-center"
+            "w-full rounded-xl font-semibold text-[15px] bg-secondary/70 hover:bg-secondary transition-all h-11 flex items-center justify-center border border-border/50"
           )}
         >
           View Details

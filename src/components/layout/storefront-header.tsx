@@ -2,6 +2,7 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { StorefrontAuth } from "./storefront-auth"
+import { CartIndicator } from "./cart-indicator"
 
 export async function StorefrontHeader() {
   let session = null
@@ -32,6 +33,7 @@ export async function StorefrontHeader() {
         </div>
         <div className="flex items-center justify-end gap-4">
           <nav className="flex items-center gap-2">
+            <CartIndicator />
             <ThemeToggle />
             <StorefrontAuth 
               key={session?.user?.email || "guest"} 

@@ -5,6 +5,7 @@ import { ArrowLeft, ShoppingCart, ShieldCheck, Zap } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { AddToCartButton } from "@/components/books/add-to-cart-button"
 
 interface BookPageProps {
   params: Promise<{ slug: string }>
@@ -97,10 +98,10 @@ export default async function BookDetailPage({ params }: BookPageProps) {
 
           <div className="pt-8 border-t w-full max-w-xl">
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center">
-              <Button size="lg" className="w-full sm:flex-1 h-14 text-base font-semibold shadow-lg shadow-primary/20 rounded-xl transition-transform hover:-translate-y-0.5" aria-label="Add to cart">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Add to Cart
-              </Button>
+              <AddToCartButton 
+                book={book} 
+                className="w-full sm:flex-1 h-14 shadow-lg shadow-primary/20"
+              />
               <Button size="lg" variant="secondary" className="w-full sm:flex-1 h-14 text-base font-semibold rounded-xl border border-border shadow-sm transition-transform hover:-translate-y-0.5">
                 Buy Now
               </Button>

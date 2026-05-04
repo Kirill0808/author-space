@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/lib/store/use-cart"
 import { useEffect, useState } from "react"
@@ -21,13 +22,16 @@ export function CartIndicator() {
   )
 
   return (
-    <div className="relative p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer group">
+    <Link 
+      href="/cart"
+      className="relative p-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer group"
+    >
       <ShoppingCart className="h-5 w-5" />
       {itemsCount > 0 && (
         <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white animate-in zoom-in duration-300">
           {itemsCount}
         </span>
       )}
-    </div>
+    </Link>
   )
 }

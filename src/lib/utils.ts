@@ -35,3 +35,10 @@ export function formatRelativeTime(date: Date): string {
   
   return date.toLocaleDateString()
 }
+
+export function formatPrice(price: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price / 100)
+}

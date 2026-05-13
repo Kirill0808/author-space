@@ -34,9 +34,7 @@ export function CheckoutButton({ totalAmount, items }: CheckoutButtonProps) {
       
       if (result.success) {
         clearCart()
-        // For now redirect to home since success page is Phase 3
-        // but we'll add a query param to show a message if needed
-        router.push("/")
+        router.push("/checkout/success")
         router.refresh()
       }
     } catch (error) {

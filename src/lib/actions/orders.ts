@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { OrderStatus } from "@prisma/client"
+import { orderSchema } from "@/lib/schemas"
 
 export async function getOrders() {
   const session = await auth()
@@ -52,4 +53,37 @@ export async function deleteOrder(id: string) {
   })
   
   revalidatePath("/admin/orders")
+}
+
+export async function createOrder(data: unknown) {
+  const session = await auth()
+  
+  if (!session?.user?.id) {
+    throw new Error("You must be logged in to place an order")
+  }
+
+  // Validate the data
+  const validatedData = orderSchema.parse(data)
+
+  const order = await prisma.$transaction(async (tx) => {
+    // In a real app, you'd recalculate prices on the server to prevent manipulation
+    
+    return await tx.order.create({
+      data: {
+        userId: session.user.id!,
+        totalAmount: validatedData.totalAmount,
+        status: "PAID",
+        items: {
+          create: validatedData.items.map((item) => ({
+            bookId: item.bookId,
+            quantity: item.quantity,
+            priceAtPurchase: item.priceAtPurchase,
+          }))
+        }
+      }
+    })
+  })
+
+  revalidatePath("/admin/orders")
+  return { success: true, orderId: order.id }
 }

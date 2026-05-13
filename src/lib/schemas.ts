@@ -25,3 +25,16 @@ export const profileSchema = z.object({
 })
 
 export type ProfileFormData = z.infer<typeof profileSchema>
+ 
+export const orderItemSchema = z.object({
+  bookId: z.string().cuid(),
+  quantity: z.number().int().positive(),
+  priceAtPurchase: z.number().int().positive(),
+})
+
+export const orderSchema = z.object({
+  items: z.array(orderItemSchema).min(1, "Order must have at least one item"),
+  totalAmount: z.number().int().positive(),
+})
+
+export type OrderData = z.infer<typeof orderSchema>

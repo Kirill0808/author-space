@@ -3,6 +3,8 @@ import { Post } from "@prisma/client"
 import { Card } from "@/components/ui/card"
 import { ArrowRight } from "lucide-react"
 
+import { formatDate } from "@/lib/utils"
+
 interface PostCardProps {
   post: Post
 }
@@ -12,7 +14,7 @@ export function PostCard({ post }: PostCardProps) {
     <Link href={`/blog/${post.slug}`} className="block group h-full">
       <Card className="h-full flex flex-col border-none shadow-none bg-background/50 hover:bg-background transition-colors p-6 rounded-2xl group-hover:ring-1 ring-primary/20 ring-inset">
         <div className="text-xs text-muted-foreground mb-3 flex items-center justify-between">
-          <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+          <span>{formatDate(post.createdAt)}</span>
         </div>
         <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors leading-snug">
           {post.title}

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { deleteOrder, updateOrderStatus } from "@/lib/actions/orders"
 import { Trash2, AlertCircle } from "lucide-react"
+import { formatDate } from "@/lib/utils"
 
 // Assume the standard Prisma generated types:
 type OrderStatus = "PENDING" | "PAID" | "SHIPPED" | "DELIVERED" | "CANCELLED"
@@ -141,7 +142,7 @@ export function OrdersTableClient({ initialOrders }: OrdersTableClientProps) {
                     </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground text-xs">
-                    {new Date(order.createdAt).toLocaleDateString()}
+                    {formatDate(order.createdAt)}
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">

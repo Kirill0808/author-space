@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { CheckCircle2, ShoppingBag, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 
 export default function SuccessPage() {
@@ -37,27 +38,26 @@ export default function SuccessPage() {
 
         <div className="bg-secondary/30 backdrop-blur-2xl border border-border/50 rounded-[2.5rem] p-10 shadow-2xl shadow-primary/5 space-y-8">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button 
-              asChild
-              size="lg"
-              className="w-full sm:w-auto h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all px-8"
+            <Link 
+              href="/books"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "w-full sm:w-auto h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all px-8"
+              )}
             >
-              <Link href="/books">
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                Continue Shopping
-              </Link>
-            </Button>
-            <Button 
-              asChild
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto h-14 rounded-2xl text-lg font-bold border-border/50 bg-background/50 hover:bg-background/80 transition-all px-8"
+              <ShoppingBag className="mr-2 h-5 w-5" />
+              Continue Shopping
+            </Link>
+            <Link 
+              href="/admin/orders"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "w-full sm:w-auto h-14 rounded-2xl text-lg font-bold border-border/50 bg-background/50 hover:bg-background/80 transition-all px-8"
+              )}
             >
-              <Link href="/admin/orders">
-                View in Admin
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
+              View in Admin
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </div>
           <p className="text-sm text-muted-foreground">
             A confirmation email will be sent shortly.

@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
+import { cn, formatDate } from "@/lib/utils"
 import { 
   Dialog, 
   DialogContent, 
@@ -116,7 +116,7 @@ export function PostsTableClient({ posts }: PostsTableClientProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground text-xs">
-                    {new Date(post.createdAt).toLocaleDateString()}
+                    {formatDate(post.createdAt)}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

@@ -17,6 +17,14 @@ export function slugify(text: string) {
     .replace(/-+$/, "")
 }
 
+export function formatDate(date: Date | string | number): string {
+  const d = new Date(date)
+  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const year = d.getFullYear()
+  return `${day}.${month}.${year}`
+}
+
 export function formatRelativeTime(date: Date): string {
   const now = new Date()
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
@@ -33,7 +41,7 @@ export function formatRelativeTime(date: Date): string {
   if (diffInDays === 1) return "Yesterday"
   if (diffInDays < 7) return `${diffInDays}d ago`
   
-  return date.toLocaleDateString()
+  return formatDate(date)
 }
 
 export function formatPrice(price: number) {

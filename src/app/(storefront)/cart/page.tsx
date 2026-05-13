@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { formatPrice } from "@/lib/utils"
+import { CheckoutButton } from "@/components/cart/checkout-button"
 
 export default function CartPage() {
   const [mounted, setMounted] = useState(false)
@@ -178,11 +179,10 @@ export default function CartPage() {
               </div>
 
               <div className="space-y-4 pt-4">
-                <Button 
-                  className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all bg-gradient-to-r from-primary to-primary/90"
-                >
-                  Checkout
-                </Button>
+                <CheckoutButton 
+                  totalAmount={getTotalPrice()}
+                  items={items}
+                />
                 <p className="text-center text-xs text-muted-foreground">
                   Secure checkout powered by Stripe
                 </p>

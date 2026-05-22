@@ -20,7 +20,11 @@ export function BuyNowButton({ book, className }: BuyNowButtonProps) {
   const { data: session, status } = useSession()
 
   const handleBuyNow = async () => {
-    if (status === "unauthenticated") {
+    if (status === "loading") {
+      return // Do nothing if session is still loading
+    }
+
+    if (!session?.user) {
       // Redirect to sign in page with redirect back to this page
       const currentUrl = typeof window !== "undefined" ? window.location.href : `/books/${book.slug}`
       router.push(`/auth/signin?callbackUrl=${encodeURIComponent(currentUrl)}`)
@@ -54,12 +58,14 @@ export function BuyNowButton({ book, className }: BuyNowButtonProps) {
     }
   }
 
+  const isBtnLoading = isLoading || status === "loading"
+
   return (
     <Button
       size="lg"
       variant="secondary"
       onClick={handleBuyNow}
-      disabled={isLoading}
+      disabled={isBtnLoading}
       className={cn(
         "w-full sm:flex-1 h-14 text-base font-semibold rounded-xl border border-border shadow-sm transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-75 disabled:pointer-events-none",
         className

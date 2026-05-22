@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
 import { Book } from "@prisma/client"
 import { Zap, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,30 +10,24 @@ import { cn } from "@/lib/utils"
 
 interface BuyNowButtonProps {
   book: Book
+  isAuthenticated: boolean
   className?: string
 }
 
-export function BuyNowButton({ book, className }: BuyNowButtonProps) {
+export function BuyNowButton({ book, isAuthenticated, className }: BuyNowButtonProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { data: session, status } = useSession()
 
   const handleBuyNow = async () => {
-    if (status === "loading") {
-      return // Do nothing if session is still loading
-    }
-
-    if (!session?.user) {
+    if (!isAuthenticated) {
       // Redirect to sign in page with redirect back to this page
-      const currentUrl = typeof window !== "undefined" ? window.location.href : `/books/${book.slug}`
-      router.push(`/auth/signin?callbackUrl=${encodeURIComponent(currentUrl)}`)
+      router.push(`/auth/signin?callbackUrl=${encodeURIComponent(window.location.href)}`)
       return
     }
 
     try {
       setIsLoading(true)
-      
-      // Prepare payload to pass schema validation (server action will recalculate prices for security)
+
       const orderData = {
         totalAmount: book.price,
         items: [{
@@ -45,7 +38,7 @@ export function BuyNowButton({ book, className }: BuyNowButtonProps) {
       }
 
       const result = await createOrder(orderData)
-      
+
       if (result.success) {
         router.push("/checkout/success")
         router.refresh()
@@ -58,14 +51,12 @@ export function BuyNowButton({ book, className }: BuyNowButtonProps) {
     }
   }
 
-  const isBtnLoading = isLoading || status === "loading"
-
   return (
     <Button
       size="lg"
       variant="secondary"
       onClick={handleBuyNow}
-      disabled={isBtnLoading}
+      disabled={isLoading}
       className={cn(
         "w-full sm:flex-1 h-14 text-base font-semibold rounded-xl border border-border shadow-sm transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-75 disabled:pointer-events-none",
         className

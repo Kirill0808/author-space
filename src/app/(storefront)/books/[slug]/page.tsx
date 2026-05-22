@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ShoppingCart, ShieldCheck, Zap } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/auth"
 import { Badge } from "@/components/ui/badge"
 import { AddToCartButton } from "@/components/books/add-to-cart-button"
 import { BuyNowButton } from "@/components/books/buy-now-button"
@@ -32,10 +33,13 @@ export async function generateMetadata({ params }: BookPageProps) {
 
 export default async function BookDetailPage({ params }: BookPageProps) {
   const { slug } = await params
-  
-  const book = await prisma.book.findUnique({
-    where: { slug }
-  })
+
+  const [book, session] = await Promise.all([
+    prisma.book.findUnique({ where: { slug } }),
+    auth(),
+  ])
+
+  const isAuthenticated = !!session?.user
 
   if (!book) {
     notFound()
@@ -100,9 +104,9 @@ export default async function BookDetailPage({ params }: BookPageProps) {
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center">
               <AddToCartButton 
                 book={book} 
-                className="w-full sm:flex-1 h-14 shadow-lg shadow-primary/20"
+                className="w-full sm:flex-1 h-14 shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30"
               />
-              <BuyNowButton book={book} />
+              <BuyNowButton book={book} isAuthenticated={isAuthenticated} />
             </div>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground bg-muted/40 p-5 rounded-2xl border border-muted">

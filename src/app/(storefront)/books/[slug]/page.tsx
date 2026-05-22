@@ -3,9 +3,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ShoppingCart, ShieldCheck, Zap } from "lucide-react"
 import { prisma } from "@/lib/prisma"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { AddToCartButton } from "@/components/books/add-to-cart-button"
+import { BuyNowButton } from "@/components/books/buy-now-button"
 
 interface BookPageProps {
   params: Promise<{ slug: string }>
@@ -102,9 +102,7 @@ export default async function BookDetailPage({ params }: BookPageProps) {
                 book={book} 
                 className="w-full sm:flex-1 h-14 shadow-lg shadow-primary/20"
               />
-              <Button size="lg" variant="secondary" className="w-full sm:flex-1 h-14 text-base font-semibold rounded-xl border border-border shadow-sm transition-transform hover:-translate-y-0.5">
-                Buy Now
-              </Button>
+              <BuyNowButton book={book} />
             </div>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground bg-muted/40 p-5 rounded-2xl border border-muted">

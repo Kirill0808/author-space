@@ -62,23 +62,46 @@ export async function createOrder(data: unknown) {
     throw new Error("You must be logged in to place an order")
   }
 
-  // Validate the data
+  // Validate the data structure
   const validatedData = orderSchema.parse(data)
 
   const order = await prisma.$transaction(async (tx) => {
-    // In a real app, you'd recalculate prices on the server to prevent manipulation
-    
+    // 1. Fetch real book prices from the database for the ordered items
+    const bookIds = validatedData.items.map((item) => item.bookId)
+    const dbBooks = await tx.book.findMany({
+      where: { id: { in: bookIds } },
+      select: { id: true, price: true }
+    })
+
+    // Create a map for quick price lookups
+    const bookPriceMap = new Map(dbBooks.map((b) => [b.id, b.price]))
+
+    let calculatedTotalAmount = 0
+    const orderItemsToCreate = []
+
+    // 2. Validate existence and calculate total on the server
+    for (const item of validatedData.items) {
+      const realPrice = bookPriceMap.get(item.bookId)
+      if (realPrice === undefined) {
+        throw new Error(`Book with ID ${item.bookId} not found`)
+      }
+
+      calculatedTotalAmount += realPrice * item.quantity
+      orderItemsToCreate.push({
+        bookId: item.bookId,
+        quantity: item.quantity,
+        priceAtPurchase: realPrice, // Use verified DB price
+      })
+    }
+
+    // 3. Create the order with server-calculated amounts
     return await tx.order.create({
       data: {
         userId: session.user.id!,
-        totalAmount: validatedData.totalAmount,
+        totalAmount: calculatedTotalAmount,
         status: "PAID",
         items: {
-          create: validatedData.items.map((item) => ({
-            bookId: item.bookId,
-            quantity: item.quantity,
-            priceAtPurchase: item.priceAtPurchase,
-          }))
+          create: orderItemsToCreate
         }
       }
     })

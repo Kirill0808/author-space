@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { prisma } from "@/lib/prisma"
 import { PostCard } from "@/components/blog/post-card"
+import { BlogFilters } from "@/components/blog/blog-filters"
+
 import { Post } from "@prisma/client"
 
 export const metadata: Metadata = {
@@ -8,14 +10,30 @@ export const metadata: Metadata = {
   description: "Read the latest thoughts, updates, and articles from the author.",
 }
 
-export default async function BlogPage() {
-  let posts: Post[] = []
+export default async function BlogPage(props: {
+  searchParams: Promise<{ query?: string; tag?: string }>
+}) {
+  const searchParams = await props.searchParams
+  const query = searchParams.query || ""
+  const tag = searchParams.tag || ""
 
+  const where: any = { published: true }
+
+  if (query) {
+    where.OR = [
+      { title: { contains: query, mode: "insensitive" } },
+      { content: { contains: query, mode: "insensitive" } },
+    ]
+  }
+
+  if (tag) {
+    where.tags = { has: tag }
+  }
+
+  let posts: Post[] = []
   try {
     posts = await prisma.post.findMany({
-      where: {
-        published: true,
-      },
+      where,
       orderBy: {
         createdAt: "desc",
       },
@@ -24,9 +42,23 @@ export default async function BlogPage() {
     console.error("Failed to fetch blog posts:", error)
   }
 
+  // Fetch unique tags from published posts
+  let allTags: string[] = []
+  try {
+    const allPostsForTags = await prisma.post.findMany({
+      where: { published: true },
+      select: { tags: true },
+    })
+    allTags = Array.from(
+      new Set(allPostsForTags.flatMap((p) => p.tags || []))
+    ).sort()
+  } catch (error) {
+    console.error("Failed to fetch post tags:", error)
+  }
+
   return (
     <div className="container mx-auto px-4 py-16 sm:py-24">
-      <div className="mx-auto max-w-2xl lg:max-w-4xl text-center mb-16">
+      <div className="mx-auto max-w-2xl lg:max-w-4xl text-center mb-10">
         <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
           Author&apos;s <span className="text-primary italic">Blog</span>
         </h1>
@@ -35,6 +67,9 @@ export default async function BlogPage() {
         </p>
       </div>
 
+      {/* Interactive Filters Panel */}
+      <BlogFilters allTags={allTags} />
+
       {posts.length > 0 ? (
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
@@ -42,10 +77,10 @@ export default async function BlogPage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-muted/20 rounded-3xl border border-dashed border-muted">
+        <div className="text-center py-20 bg-muted/20 rounded-3xl border border-dashed border-border/50">
           <h2 className="text-2xl font-semibold mb-2">No posts found</h2>
           <p className="text-muted-foreground">
-            There are no published blog posts at the moment. Check back later!
+            We couldn&apos;t find any posts matching your criteria. Try adjusting your filters!
           </p>
         </div>
       )}

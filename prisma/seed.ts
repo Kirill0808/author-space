@@ -41,6 +41,7 @@ async function main() {
       price: 1999, // $19.99
       slug: 'the-art-of-writing',
       coverImage: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=2787&auto=format&fit=crop',
+      tags: ['Non-Fiction', 'Writing', 'Education'],
     },
   })
 
@@ -51,6 +52,7 @@ async function main() {
       price: 1499, // $14.99
       slug: 'journey-to-the-stars',
       coverImage: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=2940&auto=format&fit=crop',
+      tags: ['Sci-Fi', 'Space', 'Adventure'],
     },
   })
 
@@ -61,6 +63,7 @@ async function main() {
       price: 2999,
       slug: 'echoes-of-eternity',
       coverImage: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=2588&auto=format&fit=crop',
+      tags: ['Fantasy', 'Magic', 'Epic'],
     },
   })
 
@@ -71,6 +74,7 @@ async function main() {
       price: 1850,
       slug: 'digital-minimalism',
       coverImage: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2712&auto=format&fit=crop',
+      tags: ['Self-Help', 'Tech', 'Productivity'],
     },
   })
 
@@ -81,6 +85,7 @@ async function main() {
       price: 2490,
       slug: 'the-whispering-shadows',
       coverImage: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=2730&auto=format&fit=crop',
+      tags: ['Thriller', 'Mystery', 'Psychological'],
     },
   })
 
@@ -91,6 +96,7 @@ async function main() {
       price: 3499,
       slug: 'mastering-nextjs',
       coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2940&auto=format&fit=crop',
+      tags: ['Tech', 'Coding', 'Education'],
     },
   })
 
@@ -102,6 +108,7 @@ async function main() {
       content: 'This is my first post! I am really excited to share my journey with you all.',
       published: true,
       authorId: admin.id,
+      tags: ['Writing', 'News'],
     },
   })
 
@@ -112,6 +119,7 @@ async function main() {
       content: 'I finally finished chapter 5 after weeks of outlining and drafting. It was a tough one!',
       published: true,
       authorId: admin.id,
+      tags: ['Writing', 'Updates', 'Creative'],
     },
   })
 

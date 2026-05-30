@@ -67,6 +67,7 @@ model Book {
   price       Int      // in cents
   coverImage  String?
   slug        String   @unique
+  tags        String[] @default([])
   orderItems  OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -79,6 +80,7 @@ model Post {
   content   String   @db.Text
   published Boolean  @default(false)
   authorId  String
+  tags      String[] @default([])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

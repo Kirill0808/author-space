@@ -89,6 +89,7 @@ export default function CartPage() {
                           src={item.book.coverImage}
                           alt={item.book.title}
                           fill
+                          sizes="(max-width: 768px) 100vw, 128px"
                           className="object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                       ) : (

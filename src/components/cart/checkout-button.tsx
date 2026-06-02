@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { createOrder } from "@/lib/actions/orders"
+import { createOrder, createCheckoutSession } from "@/lib/actions/orders"
 import { useCart } from "@/lib/store/use-cart"
 import { Loader2, ShoppingBag } from "lucide-react"
 
@@ -32,10 +32,14 @@ export function CheckoutButton({ totalAmount, items }: CheckoutButtonProps) {
 
       const result = await createOrder(orderData)
       
-      if (result.success) {
-        clearCart()
-        router.push("/checkout/success")
-        router.refresh()
+      if (result.success && result.orderId) {
+        const sessionResult = await createCheckoutSession(result.orderId)
+        if (sessionResult.url) {
+          clearCart()
+          window.location.href = sessionResult.url
+        } else {
+          throw new Error("Failed to create Stripe session URL")
+        }
       }
     } catch (error) {
       console.error("Checkout failed:", error)

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { OrderStatus } from "@prisma/client"
 import { orderSchema } from "@/lib/schemas"
+import { getStripe } from "@/lib/stripe"
 
 export async function getOrders() {
   const session = await auth()
@@ -99,7 +100,7 @@ export async function createOrder(data: unknown) {
       data: {
         userId: session.user.id!,
         totalAmount: calculatedTotalAmount,
-        status: "PAID",
+        status: "PENDING",
         items: {
           create: orderItemsToCreate
         }
@@ -110,3 +111,48 @@ export async function createOrder(data: unknown) {
   revalidatePath("/admin/orders")
   return { success: true, orderId: order.id }
 }
+
+export async function createCheckoutSession(orderId: string) {
+  const session = await auth()
+  if (!session?.user?.id) throw new Error("Unauthorized")
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: {
+      items: {
+        include: {
+          book: true,
+        },
+      },
+    },
+  })
+
+  if (!order) throw new Error("Order not found")
+
+  const stripe = getStripe()
+  const stripeSession = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: order.items.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.book.title,
+          description: item.book.description || "",
+          images: item.book.coverImage ? [item.book.coverImage] : [],
+        },
+        unit_amount: item.priceAtPurchase, // price is stored in cents
+      },
+      quantity: item.quantity,
+    })),
+    mode: "payment",
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/cart`,
+    metadata: {
+      orderId: order.id,
+      userId: session.user.id,
+    },
+  })
+
+  return { url: stripeSession.url }
+}
+
